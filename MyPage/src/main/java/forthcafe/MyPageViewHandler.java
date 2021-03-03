@@ -41,6 +41,32 @@ public class MyPageViewHandler {
         }
     }
 
+     @StreamListener(KafkaProcessor.INPUT)
+    public void whenReviewed_then_CREATE_2 (@Payload Reviewed reviewed) {
+        try {
+            if (reviewed.isMe()) {
+                // view 객체 생성
+                MyPage myPage  = new MyPage();
+
+                // view 객체에 이벤트의 Value 를 set 함
+                myPage.setId(reviewed.getId());
+                myPage.setMenuId(reviewed.getMenuId());
+                myPage.setMenuName(reviewed.getMenuName());
+                myPage.setOrdererName(reviewed.getOrdererName());
+                myPage.setPrice(reviewed.getPrice());
+                myPage.setQuantity(reviewed.getQuantity());
+                myPage.setStatus("Reviewed");
+                myPage.setReviewText(reviewed.getReviewText());
+
+
+                // view 레파지 토리에 save
+                myPageRepository.save(myPage);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @StreamListener(KafkaProcessor.INPUT)
     public void whenPayed_then_UPDATE_1(@Payload Payed payed) {

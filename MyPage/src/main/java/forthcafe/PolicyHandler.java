@@ -58,4 +58,12 @@ public class PolicyHandler{
         }
     }
 
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverReviewed_(@Payload Reviewed reviewed){
+
+        if(reviewed.isMe()){
+            System.out.println("##### listener  : " + reviewed.toJson());
+        }
+    }
+    
 }

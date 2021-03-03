@@ -4,6 +4,10 @@ import javax.persistence.*;
 import org.springframework.beans.BeanUtils;
 import java.util.List;
 
+
+import forthcafe.external.Review;
+import forthcafe.external.ReviewService;
+
 @Entity
 @Table(name="Delivery_table")
 public class Delivery {
@@ -24,6 +28,11 @@ public class Delivery {
         Deliveried deliveried = new Deliveried();
         BeanUtils.copyProperties(this, deliveried);
         deliveried.publishAfterCommit();
+
+        Review review = new Review();
+        BeanUtils.copyProperties(this, review);
+        // feignclient 호출
+        DeliveryApplication.applicationContext.getBean(ReviewService.class).review(review);
     }
 
     @PostUpdate

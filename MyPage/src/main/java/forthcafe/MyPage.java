@@ -16,6 +16,7 @@ public class MyPage {
     private Double price;
     private Integer quantity;
     private String status;
+    private String reviewText;
 
     public Long getId() {
         return id;
@@ -69,6 +70,14 @@ public class MyPage {
 
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
+    }
+
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
+
+    public String getReviewText() {
+        return reviewText;
     }
 
 }
