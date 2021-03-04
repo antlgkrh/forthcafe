@@ -29,7 +29,7 @@
 ![증빙10](https://github.com/bigot93/forthcafe/blob/main/images/%ED%97%A5%EC%82%AC%EA%B3%A0%EB%82%A0.png)
 
 # 구현
-분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 구현한 각 서비스를 로컬에서 실행하는 방법은 아래와 같다 (각각의 포트넘버는 8081 ~ 8084, 8088 이다)
+분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 구현한 각 서비스를 로컬에서 실행하는 방법은 아래와 같다 (각각의 포트넘버는 8081 ~ 8085, 8088 이다)
 ```
 cd Order
 mvn spring-boot:run  
@@ -43,11 +43,12 @@ mvn spring-boot:run
 cd MyPage
 mvn spring-boot:run  
 
+cd Review
+mvn spring-boot:run 
+
 cd gateway
 mvn spring-boot:run 
 
-cd Review
-mvn spring-boot:run 
 ```
 
 ## DDD 의 적용
@@ -163,7 +164,7 @@ DDD 적용 후 REST API의 테스트를 통하여 정상적으로 동작하는 �
 # GateWay 적용
 API GateWay를 통하여 마이크로 서비스들의 집입점을 통일할 수 있다. 다음과 같이 GateWay를 적용하였다.
 
-```yaml
+```
 server:
   port: 8088
 
@@ -190,6 +191,10 @@ spring:
           uri: http://localhost:8084
           predicates:
             - Path= /myPages/**
+        - id: Review
+          uri: http://localhost:8085
+          predicates:
+            - Path=/reviews/** 
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -225,6 +230,10 @@ spring:
           uri: http://MyPage:8080
           predicates:
             - Path= /myPages/**
+        - id: Review
+          uri: http://Review:8080
+          predicates:
+            - Path=/reviews/**             
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -238,6 +247,7 @@ spring:
 
 server:
   port: 8080
+
 ```
 8088 port로 Order서비스 정상 호출
 
