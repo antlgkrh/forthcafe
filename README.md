@@ -52,67 +52,104 @@ mvn spring-boot:run
 
 ## DDD 의 적용
 msaez.io를 통해 구현한 Aggregate 단위로 Entity를 선언 후, 구현을 진행하였다.
-
-Entity Pattern과 Repository Pattern을 적용하기 위해 Spring Data REST의 RestRepository를 적용하였다.
-
 **Review 서비스의 Review.java**
 ```java 
-
-```
-
-**Pay 서비스의 PolicyHandler.java**
-```java
 package forthcafe;
 
-import forthcafe.config.kafka.KafkaProcessor;
-
+import javax.persistence.*;
+import org.springframework.beans.BeanUtils;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Service;
+@Entity
+@Table(name="Review_table")
+public class Review {
 
-@Service
-public class PolicyHandler{
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+    private String ordererName;
+    private String menuName;
+    private Long menuId;
+    private Double price;
+    private Integer quantity;
+    private String status;
+    private String reviewText;
 
-    @Autowired
-    PayRepository payRepository;
 
-    @StreamListener(KafkaProcessor.INPUT)
-    public void onStringEventListener(@Payload String eventString){
-
+    public Long getId() {
+        return id;
     }
 
-    @StreamListener(KafkaProcessor.INPUT)
-    public void wheneverOrderCancelled_(@Payload OrderCancelled orderCancelled){
-
-        try {
-            if(orderCancelled.isMe()){
-                System.out.println("##### OrderCancelled listener  : " + orderCancelled.toJson());
-    
-                Optional<Pay> Optional = payRepository.findById(orderCancelled.getId());
-    
-                if( Optional.isPresent()) {
-                    Pay pay = Optional.get();
-    
-                    // 객체에 이벤트의 eventDirectValue 를 set 함
-                    pay.setId(orderCancelled.getId());
-                    pay.setMenuId(orderCancelled.getMenuId());
-                    pay.setMenuName(orderCancelled.getMenuName());
-                    pay.setOrdererName(orderCancelled.getOrdererName());
-                    pay.setPrice(orderCancelled.getPrice());
-                    pay.setQuantity(orderCancelled.getQuantity());
-                    pay.setStatus("payCancelled");
-
-                    payRepository.save(pay);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void setId(Long id) {
+        this.id = id;
     }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getOrdererName() {
+        return ordererName;
+    }
+
+    public void setOrdererName(String ordererName) {
+        this.ordererName = ordererName;
+    }
+
+    public String getMenuName() {
+        return menuName;
+    }
+
+    public void setMenuName(String menuName) {
+        this.menuName = menuName;
+    }
+
+    public Long getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Long menuId) {
+        this.menuId = menuId;
+    }
+
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+
+
+}
+
+```
+* Entity Pattern 과 Repository Pattern 을 적용하여 JPA 를 통하여 다양한 데이터소스 유형 (RDB or NoSQL) 에 대한 별도의 처리가 없도록 데이터 접근 어댑터를 자동 생성하기 위하여 Spring Data REST 의 RestRepository 를 적용하였다
+
+**Review 서비스의 ReviewRepository.java**
+```java
+package forthcafe;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface ReviewRepository extends PagingAndSortingRepository<Review, Long>{
 
 }
 ```
