@@ -45,6 +45,9 @@ mvn spring-boot:run
 
 cd gateway
 mvn spring-boot:run 
+
+cd Review
+mvn spring-boot:run 
 ```
 
 ## DDD 의 적용
@@ -52,106 +55,9 @@ msaez.io를 통해 구현한 Aggregate 단위로 Entity를 선언 후, 구현을
 
 Entity Pattern과 Repository Pattern을 적용하기 위해 Spring Data REST의 RestRepository를 적용하였다.
 
-**Order 서비스의 Order.java**
+**Review 서비스의 Review.java**
 ```java 
-package forthcafe;
 
-import javax.persistence.*;
-import org.springframework.beans.BeanUtils;
-
-import forthcafe.external.Pay;
-import forthcafe.external.PayService;
-
-@Entity
-@Table(name="Order_table")
-public class Order {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
-    private String ordererName;
-    private String menuName;
-    private Long menuId;
-    private Double price;
-    private Integer quantity;
-    private String status;
-
-    @PostPersist
-    public void onPostPersist(){
-        Ordered ordered = new Ordered();
-        BeanUtils.copyProperties(this, ordered);
-        ordered.setStatus("Order");
-        
-        ordered.publish();
-
-        Pay pay = new Pay();
-        BeanUtils.copyProperties(this, pay);
-        
-        OrderApplication.applicationContext.getBean(PayService.class).pay(pay);
-    }
-    
-    @PreRemove
-    public void onPreRemove(){
-        OrderCancelled orderCancelled = new OrderCancelled();
-        BeanUtils.copyProperties(this, orderCancelled);
-
-        orderCancelled.publishAfterCommit();
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getOrdererName() {
-        return ordererName;
-    }
-
-    public void setOrdererName(String ordererName) {
-        this.ordererName = ordererName;
-    }
-
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
-    }
-
-    public Long getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
-    }
-}
 ```
 
 **Pay 서비스의 PolicyHandler.java**
