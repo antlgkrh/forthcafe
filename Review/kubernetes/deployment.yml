@@ -1,24 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Review
+  name: review
   labels:
-    app: Review
+    app: review
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: Review
+      app: review
   template:
     metadata:
       labels:
-        app: Review
+        app: review
     spec:
       containers:
-        - name: Review
-          image: username/Review:latest
+        - name: review
+          image: skuser09.azurecr.io/review:v1
           ports:
             - containerPort: 8080
+          # autoscale start
+          resources:
+              limits:
+                cpu: 500m
+              requests:
+                cpu: 200m
+          # autoscale end
+          ### config map start
+          #env:
+          #  - name: SYS_MODE
+          #    valueFrom:
+          #      configMapKeyRef:
+          #        name: systemmode
+          #        key: sysmode
+          ### config map end    
           readinessProbe:
             httpGet:
               path: '/actuator/health'

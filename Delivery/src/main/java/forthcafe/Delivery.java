@@ -29,10 +29,10 @@ public class Delivery {
         BeanUtils.copyProperties(this, deliveried);
         deliveried.publishAfterCommit();
 
-        Review review = new Review();
-        BeanUtils.copyProperties(this, review);
+//        Review review = new Review();
+//        BeanUtils.copyProperties(this, review);
         // feignclient 호출
-        DeliveryApplication.applicationContext.getBean(ReviewService.class).review(review);
+//        DeliveryApplication.applicationContext.getBean(ReviewService.class).review(review);
     }
 
     @PostUpdate

@@ -22,29 +22,32 @@ public class Review {
 
     @PrePersist
     public void onPrePersist(){
-        Reviewed reviewed = new Reviewed();
-        BeanUtils.copyProperties(this, reviewed);
+   // configMap 설정
+//        String sysEnv = System.getenv("SYS_MODE");
+//        if(sysEnv == null) sysEnv = "LOCAL";
+//        System.out.println("################## SYSTEM MODE: " + sysEnv);
 
+
+        final Reviewed reviewed = new Reviewed();
+        BeanUtils.copyProperties(this, reviewed);
         reviewed.setReviewText("5 Stars");
         // kafka push
         reviewed.publishAfterCommit();
-       // reviewed.publish();
-
+        // reviewed.publish();
 
         // delay test시 주석해제
-        //try {
-        //        Thread.currentThread().sleep((long) (400 + Math.random() * 220));
-        //} catch (InterruptedException e) {
-        //        e.printStackTrace();
-        //}
+        // try {
+        // Thread.currentThread().sleep((long) (400 + Math.random() * 220));
+        // } catch (InterruptedException e) {
+        // e.printStackTrace();
+        // }
     }
-
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -52,21 +55,23 @@ public class Review {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(final Double price) {
         this.price = price;
     }
+
     public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
+
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -74,7 +79,7 @@ public class Review {
         return ordererName;
     }
 
-    public void setOrdererName(String ordererName) {
+    public void setOrdererName(final String ordererName) {
         this.ordererName = ordererName;
     }
 
@@ -82,7 +87,7 @@ public class Review {
         return menuName;
     }
 
-    public void setMenuName(String menuName) {
+    public void setMenuName(final String menuName) {
         this.menuName = menuName;
     }
 
@@ -90,11 +95,11 @@ public class Review {
         return menuId;
     }
 
-    public void setMenuId(Long menuId) {
+    public void setMenuId(final Long menuId) {
         this.menuId = menuId;
     }
 
-    public void setReviewText(String reviewText) {
+    public void setReviewText(final String reviewText) {
         this.reviewText = reviewText;
     }
 
