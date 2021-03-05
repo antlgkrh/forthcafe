@@ -716,7 +716,8 @@ kubectl get pod
  siege -c15 -t180S  -v --content-type "application/json" 'http://Review:8080/reviews POST {"memuId":2, "quantity":1}'
 ```
 
-* Readiness Probe 제외 시 
+* Readiness Probe 제외 시
+
 ![image](https://user-images.githubusercontent.com/30856023/110058532-d1ed5580-7da5-11eb-85da-f639678df2d2.png)
 
 ![image](https://user-images.githubusercontent.com/30856023/110058765-54761500-7da6-11eb-8144-6da3d12a6bfd.png)
