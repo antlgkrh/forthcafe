@@ -726,18 +726,22 @@ kubectl get pod
 * Readiness Probe 설정
  
 * 배포전
+
 ![image](https://user-images.githubusercontent.com/30856023/110057773-84bcb400-7da4-11eb-9994-16c559adf7a0.png)
 
 
 * 배포중
+
 ![image](https://user-images.githubusercontent.com/30856023/110058177-3f4cb680-7da5-11eb-9fb5-02602947f025.png)
 
 
 * 배포후
+
 ![image](https://user-images.githubusercontent.com/30856023/110058360-8c308d00-7da5-11eb-97a6-13ea18ac693a.png)
 
 
 * 배포 진행 중 서비스 확인
+
 ![image](https://user-images.githubusercontent.com/30856023/110059097-e9790e00-7da6-11eb-9f7f-f812f6521812.png)
 
 
